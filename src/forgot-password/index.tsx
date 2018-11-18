@@ -1,37 +1,34 @@
 import * as React from "react";
 import {
-	Button,
 	Card,
 	Elevation,
-	FormGroup,
-	InputGroup,
-	ButtonGroup,
 } from "@blueprintjs/core";
-import { Link } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from "react-router";
+
 import styles from "./styles.module.css";
+import ForgotPasswordForm, { ForgotPasswordValues } from './forgot-password-form';
+
+const ForgotPasswordRoute = withRouter<any>(
+	class ForgotPasswordRoute extends React.Component<RouteComponentProps<{}>, any> {
+		handleSubmit = (payload: ForgotPasswordValues): void => {
+			console.log(payload);
+			this.props.history.push('/login');
+		}
+		render() {
+			return (
+				<div className={styles.forgot}>
+					<Card interactive={true} elevation={Elevation.TWO}>
+						<ForgotPasswordForm onSubmit={this.handleSubmit} />
+					</Card>
+				</div>
+			);
+		}
+	}
+)
 
 class ForgotPassword extends React.Component<any, any> {
 	render() {
-		return (
-			<div className={styles.forgot}>
-				<Card interactive={true} elevation={Elevation.TWO}>
-					<h2>Forgot Password?</h2>
-					<form>
-						<FormGroup
-							label="email"
-							labelFor="user-email"
-							labelInfo="(required)"
-						>
-							<InputGroup id="user-email" />
-						</FormGroup>
-						<ButtonGroup>
-							<Button>Submit</Button>
-							<Link className="bp3-button" to="/login">Login</Link>
-						</ButtonGroup>
-					</form>
-				</Card>
-			</div>
-		);
+		return <ForgotPasswordRoute />
 	}
 }
 
