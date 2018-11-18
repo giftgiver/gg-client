@@ -7,6 +7,13 @@ import {
 	ButtonGroup
 } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
+
+const ForgotPasswordSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Invalid email')
+    .required('Required'),
+});
 
 export interface ForgotPasswordValues {
 	email: string;
@@ -22,6 +29,7 @@ export const ForgotPassword: React.SFC<ForgotPasswordProps> = ({onSubmit}) => {
 			<h1>Forgot password</h1>
 			<Formik
 				initialValues={{ email: ""}}
+				validationSchema={ForgotPasswordSchema}
 				onSubmit={(values: ForgotPasswordValues) => onSubmit(values)}
 				render={(formikBag: FormikProps<ForgotPasswordValues>) => (
 					<Form>

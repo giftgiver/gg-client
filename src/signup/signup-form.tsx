@@ -7,6 +7,43 @@ import {
 	ButtonGroup
 } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
+
+function validate(getValidationSchema: Function) {
+	return (values: SignupFormValues) => {
+	  const validationSchema = getValidationSchema(values)
+	  try {
+		validationSchema.validateSync(values, { abortEarly: false })
+		return {}
+	  } catch (error) {
+		return getErrorsFromValidationError(error)
+	  }
+	}
+  }
+
+function getErrorsFromValidationError(validationError: any) {
+	const FIRST_ERROR = 0
+	return validationError.inner.reduce((errors: any, error: any) => {
+		return {
+		...errors,
+		[error.path]: error.errors[FIRST_ERROR],
+		}
+	}, {})
+}
+
+function getYupValidationSchema(values: SignupFormValues) {
+	return Yup.object().shape({
+		email: Yup.string()
+			.email('Invalid email')
+			.required('Required'),
+		password: Yup.string()
+			.required('Required')
+			.min(8, 'password must be at least 8 letters'),
+		passwordConfirm: Yup.string()
+			.oneOf([values.password], 'Passwords are not the same!')
+			.required('Required'),
+	})
+  }
 
 export interface SignupFormValues {
 	email: string;
@@ -24,6 +61,7 @@ export const Signup: React.SFC<SignupProps> = ({onSubmit}) => {
 			<h1>Sign up</h1>
 			<Formik
 				initialValues={{ email: "", password: "", passwordConfirm: ""}}
+				validate={validate(getYupValidationSchema)}
 				onSubmit={(values: SignupFormValues) => onSubmit(values)}
 				render={(formikBag: FormikProps<SignupFormValues>) => (
 					<Form>

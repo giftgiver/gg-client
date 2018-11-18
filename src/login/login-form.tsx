@@ -7,7 +7,15 @@ import {
 	ButtonGroup
 } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
 
+const LoginSchema = Yup.object().shape({
+	email: Yup.string()
+	  .email('Invalid email')
+	  .required('Required'),
+	password: Yup.string()
+		.required('Required'),
+  });
 export interface LoginFormValues {
 	email: string;
 	password: string;
@@ -23,6 +31,7 @@ export const LoginForm: React.SFC<LoginFormProps> = ({onSubmit}) => {
 			<h1>Login</h1>
 			<Formik
 				initialValues={{ email: "", password: ""}}
+				validationSchema={LoginSchema}
 				onSubmit={(values: LoginFormValues) => onSubmit(values)}
 				render={(formikBag: FormikProps<LoginFormValues>) => (
 					<Form>
