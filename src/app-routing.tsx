@@ -1,27 +1,17 @@
 import * as React from "react";
-import { Route, BrowserRouter as Router, Switch, RouteProps } from "react-router-dom";
-import ForgotPassword from "./forgot-password";
+import { Route, BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 import Givers from "./givers";
-import LandingPage from "./landing-page";
-import Login from "./login";
-import Signup from "./signup";
-import Nav from './nav';
+import PublicRoutes from './public-routes';
 
 class AppRouting extends React.Component<any, any> {
 	render() {
 		return (
 			<Router>
-				<div>
-					<Nav />
-					<Switch>
-						<Route exact path="/" component={LandingPage} />
-						<Route exact path="/forgot-password" component={ForgotPassword} />
-						<Route exact path="/login" component={ Login } />
-						<Route exact path="/signup" component={Signup} />
-						<Route exact path="/givers" component={Givers} />
-					</Switch>
-
-				</div>
+				<Switch>
+					<Route exact path="/" component={PublicRoutes} />
+					<Route exact path="/givers" component={Givers} />
+					<Route path="*" component={PublicRoutes} />
+				</Switch>
 			</Router>
 		);
 	}
