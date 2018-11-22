@@ -23,7 +23,7 @@ const SignupRoute = withRouter<any>(
 
 			request<{createUser: {token: string}}>('http://localhost:1337/graphql', mutation, variables)
 				.then((data: {createUser: {token: string}}) => {
-					this.props.history.push('gg/givers');
+					this.props.history.push('givers');
 				});
 		}
 		render() {

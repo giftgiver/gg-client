@@ -10,8 +10,8 @@ class AppRouting extends React.Component<any, any> {
 			<Router>
 				<Switch>
 					<Route exact path="/" component={PublicRoutes} />
-					<ProtectedRoute path="/gg" isAuthenticated={() => true } component={ProtectedView} />
-					<Route path="*" component={PublicRoutes} />
+					<ProtectedRoute path="/givers" isAuthenticated={() => true } component={ProtectedView} />
+					<Route path="*" render={() => <div>These are not the droids you're looking for</div>} />
 				</Switch>
 			</Router>
 		);
