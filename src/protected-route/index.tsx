@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 interface ProtectedRouteProps {
 	isAuthenticated: () => boolean;
 	user: {id: string, name: string};
-	component: React.Component;
+	component: React.ComponentClass;
 	path: string;
 }
 
@@ -22,8 +22,8 @@ class ProtectedRoute extends React.Component<ProtectedRouteProps, State> {
 	}
 
 	renderRoute = (props: any) => {
-		const { component, isAuthenticated } = this.props;
-		const Component = component;
+		const { component: Component, isAuthenticated } = this.props;
+
 		if (!isAuthenticated()) {
 			return <Redirect to="/" />
 		}
