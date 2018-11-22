@@ -10,9 +10,31 @@ import LoginForm, { LoginFormValues } from './login-form';
 
 const LoginRoute = withRouter<any>(
 	class LoginComponent extends React.Component<RouteComponentProps<{}>, any> {
-		handleSubmit = (payload: LoginFormValues): void => {
-			console.log(payload);
-			this.props.history.push('/givers');
+		handleSubmit = ({email, password}: LoginFormValues): void => {
+			const query = `query login($login: Login!) {
+				login(login: $login) {
+					id
+				  	email
+				}
+			}`;
+
+			// headers here is required. Without it, you'll get a weird error
+			fetch('http://localhost:1337/graphql', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json',
+				},
+				body: JSON.stringify({
+					query,
+					variables: { login: { email, password }},
+				})
+			})
+			.then(r => r.json())
+			.then(res => {
+				console.log(res);
+				this.props.history.push('/givers');
+			})
 		}
 		render() {
 			return (

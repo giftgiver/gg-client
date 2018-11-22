@@ -10,9 +10,29 @@ import SignupForm, { SignupFormValues } from './signup-form';
 
 const SignupRoute = withRouter<any>(
 	class SignupComponent extends React.Component<RouteComponentProps<{}>, any> {
-		handleSubmit = (payload: SignupFormValues): void => {
-			console.log(payload);
-			this.props.history.push('/givers');
+		handleSubmit = ({email, password}: SignupFormValues): void => {
+			const query = `mutation createUser($user: UserInput!) {
+				createUser(user: $user) {
+					token
+				}
+			}`;
+
+			fetch('http://localhost:1337/graphql', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json',
+				},
+				body: JSON.stringify({
+					query,
+					variables: { user: { email, password }},
+				})
+			})
+			.then(r => r.json())
+			.then(res => {
+				console.log(res);
+				this.props.history.push('/givers');
+			})
 		}
 		render() {
 			return (
