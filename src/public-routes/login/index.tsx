@@ -31,7 +31,7 @@ const LoginRoute = withRouter<any>(
 			request<LoginResponse>('http://localhost:1337/graphql', query, variables)
 				.then((data: LoginResponse) => {
 					if (data.login.id) {
-						this.props.history.push('/givers');
+						this.props.history.push('gg/givers');
 					}
 			});
 

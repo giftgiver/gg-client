@@ -7,12 +7,24 @@ import { withRouter, RouteComponentProps } from "react-router";
 
 import styles from "./styles.module.css";
 import SignupForm, { SignupFormValues } from './signup-form';
+import { request } from 'graphql-request';
 
 const SignupRoute = withRouter<any>(
 	class SignupComponent extends React.Component<RouteComponentProps<{}>, any> {
-		handleSubmit = (payload: SignupFormValues): void => {
-			console.log(payload);
-			this.props.history.push('/givers');
+		handleSubmit = ({email, password}: SignupFormValues): void => {
+			const mutation = `
+				mutation createUser($user: UserInput!) {
+					createUser(user: $user) {
+						token
+					}
+				}`;
+
+			const variables = { user: { email, password } };
+
+			request<{createUser: {token: string}}>('http://localhost:1337/graphql', mutation, variables)
+				.then((data: {createUser: {token: string}}) => {
+					this.props.history.push('gg/givers');
+				});
 		}
 		render() {
 			return (

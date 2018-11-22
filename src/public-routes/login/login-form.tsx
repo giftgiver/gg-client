@@ -57,7 +57,7 @@ export const LoginForm: React.SFC<LoginFormProps> = ({onSubmit}) => {
 									labelInfo="(required)"
 								>
 									<InputGroup id="user-password" {...field} type="password"/>
-									{form.touched.password && form.errors.email && form.errors.password}
+									{form.touched.password && form.errors.password && form.errors.password}
 								</FormGroup>
 							)}
 						/>
