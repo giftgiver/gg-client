@@ -52,6 +52,6 @@ class Login extends React.Component<any, any> {
 	render() {
 		return <LoginRoute />
 	}
-  }
+}
 
 export default Login;
