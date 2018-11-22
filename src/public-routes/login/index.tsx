@@ -11,7 +11,33 @@ import LoginForm, { LoginFormValues } from './login-form';
 const LoginRoute = withRouter<any>(
 	class LoginComponent extends React.Component<RouteComponentProps<{}>, any> {
 		handleSubmit = (payload: LoginFormValues): void => {
-			console.log(payload);
+			const bodys = `"query" {
+				login(login: { email: "${payload.email}", password: "${payload.password}"}) {
+				  id
+				  email
+				  firstName
+				  lastName
+				  phoneNumber
+				}
+			  }`;
+
+			const body = `{“query”:“query login($login:Login!) {
+				login(login: $login) {
+					id
+					email
+					firstName
+					lastName
+					phoneNumber
+				}
+			}“,
+			”variables”:{“login”:{“email”:“${payload.email}”,“password”:“${payload.password}“}},“operationName”:“login”}`;
+
+			fetch('http://localhost:1337/graphql', {
+				method: 'POST',
+				body,
+			}).then(res => {
+				console.log(res);
+			})
 			this.props.history.push('/givers');
 		}
 		render() {
