@@ -4,41 +4,37 @@ import {
 	Elevation,
 } from "@blueprintjs/core";
 import { withRouter, RouteComponentProps } from "react-router";
+import { request } from 'graphql-request';
 
 import styles from "./styles.module.css";
 import LoginForm, { LoginFormValues } from './login-form';
 
 const LoginRoute = withRouter<any>(
 	class LoginComponent extends React.Component<RouteComponentProps<{}>, any> {
-		handleSubmit = (payload: LoginFormValues): void => {
-			const bodys = `"query" {
-				login(login: { email: "${payload.email}", password: "${payload.password}"}) {
+		handleSubmit = ({ email, password }: LoginFormValues): void => {
+
+			const query = `query login($login:Login!) {
+				login(login: $login) {
 				  id
 				  email
-				  firstName
-				  lastName
-				  phoneNumber
 				}
 			  }`;
 
-			const body = `{“query”:“query login($login:Login!) {
-				login(login: $login) {
-					id
-					email
-					firstName
-					lastName
-					phoneNumber
-				}
-			}“,
-			”variables”:{“login”:{“email”:“${payload.email}”,“password”:“${payload.password}“}},“operationName”:“login”}`;
+			const variables = {
+				login: { email, password }
+			}
 
-			fetch('http://localhost:1337/graphql', {
-				method: 'POST',
-				body,
-			}).then(res => {
-				console.log(res);
-			})
-			this.props.history.push('/givers');
+			interface LoginResponse {
+				login: {id: string, email: string}
+			}
+
+			request<LoginResponse>('http://localhost:1337/graphql', query, variables)
+				.then((data: LoginResponse) => {
+					if (data.login.id) {
+						this.props.history.push('/givers');
+					}
+			});
+
 		}
 		render() {
 			return (
