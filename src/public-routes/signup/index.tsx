@@ -25,6 +25,7 @@ const SignupRoute = withRouter<any>(
 				},
 				body: JSON.stringify({
 					query,
+					operationName: 'createUser',
 					variables: { user: { email, password }},
 				})
 			})

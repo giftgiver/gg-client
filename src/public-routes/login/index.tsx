@@ -27,6 +27,7 @@ const LoginRoute = withRouter<any>(
 				},
 				body: JSON.stringify({
 					query,
+					operationName: 'login',
 					variables: { login: { email, password }},
 				})
 			})
